@@ -557,14 +557,18 @@ const Terminal: React.FC = () => {
             ]);
 
             try {
-                let operation = await generateVideo(prompt);
+                // Fix: Use a const for the initial result to help TypeScript's control flow analysis.
+                // The mutable `let operation` was causing TS to incorrectly widen the type within the
+                // `setLines` closure, as it couldn't guarantee the variable hadn't been changed.
+                const operationResult = await generateVideo(prompt);
 
-                if (typeof operation === 'string') { // Handle initial error
-                    setLines(prev => [...prev, { type: LineType.ERROR, text: operation }]);
+                if (typeof operationResult === 'string') { // Handle initial error
+                    setLines(prev => [...prev, { type: LineType.ERROR, text: operationResult }]);
                     setIsLoading(false);
                     return;
                 }
                 
+                let operation = operationResult;
                 let pollCount = 0;
                 const pollMessages = [
                     "Still processing... The AI is animating the frames.",

@@ -1,0 +1,7 @@
+{
+  "name": "Gemini Modern Terminal",
+  "description": "A modern, terminal-like user interface where you can type commands and interact with a Gemini-powered AI assistant.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

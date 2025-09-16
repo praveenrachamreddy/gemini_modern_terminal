@@ -195,6 +195,10 @@ const Terminal: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   
+  const focusInput = () => {
+    inputRef.current?.focus();
+  };
+  
   // Effect for the live clock
   useEffect(() => {
     const timerId = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -239,11 +243,11 @@ const Terminal: React.FC = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
-  }, [lines, suggestions, isLoading]);
-
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
+    // After any render where the terminal is not busy, ensure the input is focused.
+    if (!isLoading && !isListening) {
+        focusInput();
+    }
+  }, [lines, suggestions, isLoading, isListening]);
 
   const handleToggleListening = () => {
     const recognition = recognitionRef.current;
